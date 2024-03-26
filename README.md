@@ -12,6 +12,7 @@ Made with ❤️ By Codepulze
 - Blocks IsDebuggerPresent
 - Windows Check cannot be bypassed until rebuilt
 - Traffic Debuggers wont work too
+- Optional Registry Check (turned off by default)
 ------------                         
                                           
                                     
