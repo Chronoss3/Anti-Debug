@@ -13,18 +13,13 @@
 - Performs IP check against a blacklist.
 - Lowers VirusTotal detection to 2/72.
 
-## Usage
-
-1. Use the provided functions to implement anti-debugging measures in your code.
-3. Ensure to include the necessary Windows header files and import statements for system calls if using the provided C functions.
-
 ## Disclaimer
 
-This anti-debug solution is designed for educational purposes and may not be foolproof against all debugging techniques. It is recommended to use additional security measures and regularly update your anti-debugging mechanisms to stay ahead of potential threats.
+This anti-debug solution is designed for educational purposes.
 
 ## Contact
 
-For inquiries or support, please reach out to Codepulze on Discord: godfathercodepulze.
+For support, please reach out to Codepulze on Discord: godfathercodepulze.
 
 ## Detection Rate
 ## - After with AntiDebug ![image](https://github.com/EvilBytecode/Anti-Debug/assets/151552809/f642d746-6f2f-459f-afec-e4595abbb25d)
