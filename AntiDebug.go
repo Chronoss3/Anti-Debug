@@ -70,7 +70,7 @@ func main() {
 if gpuchk() {
 	syscall.Exit(-1)
 }
-
+// not my code credits to muza, this might trigger AV beacuse of WMIC.
 func GCC() bool {
 	cmd := exec.Command("wmic", "path", "win32_VideoController", "get", "name")
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
