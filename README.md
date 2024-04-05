@@ -14,7 +14,7 @@
 - Lowers VirusTotal detection to 2/72.
 
 
-## Features (AntiDebug1.go)
+## Features (AntiDebugBetter.go)
 - + Check For RemoteDebugger (ADDED)
 - + Hide Threads From Debugger (ADDED)
 - + Check if GPU has VBOX / VM start
@@ -29,7 +29,7 @@
 - Performs IP check against a blacklist.
 - Lowers VirusTotal detection to 4/72.
 
-## Todo (AntiDebug1.go) :
+## Todo (AntiDebugBetter.go) :
 - TLS Callbacks ntdll.LdrpDoDebuggerBreak
 - PEB
 - Add CheckRemoteDebuggerPresent which calls NtQueryInformationProcess
