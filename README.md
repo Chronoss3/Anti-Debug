@@ -1,6 +1,6 @@
 # Codepulze Anti Debug
 
-## Features
+## Features (AntiDebug.go)
 
 - Blocks over 50+ popular debugging software.
 - Blocks IsDebuggerPresent.
@@ -13,6 +13,30 @@
 - Performs IP check against a blacklist.
 - Lowers VirusTotal detection to 2/72.
 
+
+## Features (AntiDebug1.go)
+- + Check For RemoteDebugger (ADDED)
+- + Hide Threads From Debugger (ADDED)
+- + Check if GPU has VBOX / VM start
+- Blocks over 50+ popular debugging software.
+- Blocks IsDebuggerPresent.
+- Prevents debuggers and traffic debuggers.
+- Detects and kills blacklisted processes.
+- Detects windows associated with debugging tools.
+- Checks system uptime and running processes.
+- Checks disk size, RAM, and number of processors.
+- Verifies GPU information.
+- Performs IP check against a blacklist.
+- Lowers VirusTotal detection to 4/72.
+
+## Todo (AntiDebug1.go) :
+- TLS Callbacks ntdll.LdrpDoDebuggerBreak
+- PEB
+- Add CheckRemoteDebuggerPresent which calls NtQueryInformationProcess
+- Flags and artifacts
+- Detecting breakpoints by checking the code for changes
+- Add HW Breakpoints through DR0 and DR3
+- Execution time
 ## Disclaimer
 
 This anti-debug solution is designed for educational purposes.
