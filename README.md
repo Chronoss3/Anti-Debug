@@ -19,8 +19,8 @@
 - + Hide Threads From Debugger (ADDED)
 - + Hardware Breakpoints (ADDED)
 - + OutputDebugString Exploit (ADDED)
-- + NtCloseAntiDebug_InvalidHandle & NtCloseAntiDebug_ProtectedHandle
-- + Check if GPU has VBOX / VM start
+- + NtCloseAntiDebug_InvalidHandle & NtCloseAntiDebug_ProtectedHandle (ADDED)
+- + Check if GPU has VBOX / VM start (ADDED)
 - Blocks over 50+ popular debugging software.
 - Blocks IsDebuggerPresent.
 - Prevents debuggers and traffic debuggers.
