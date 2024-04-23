@@ -17,6 +17,9 @@
 ## Features (AntiDebugBetter.go)
 - + Check For RemoteDebugger (ADDED)
 - + Hide Threads From Debugger (ADDED)
+- + Hardware Breakpoints (ADDED)
+- + OutputDebugString Exploit (ADDED)
+- + NtCloseAntiDebug_InvalidHandle & NtCloseAntiDebug_ProtectedHandle
 - + Check if GPU has VBOX / VM start
 - Blocks over 50+ popular debugging software.
 - Blocks IsDebuggerPresent.
